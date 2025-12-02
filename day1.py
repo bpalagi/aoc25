@@ -31,17 +31,21 @@ def passZero(session_cookie):
 
     for i in input:
         change = calcChange(i)
-
-        count += change
-
-        while count >= 100:
-            count -= 100
+        new_count = (count + change) % 100
+        
+        ret += abs(change) // 100
+        
+        # Partial wrap (crossed 0 once, but didn't land on it)
+        if change < 0 and new_count > count and count != 0:
             ret += 1
-        while count <= -1:
-            count += 100
+        elif change > 0 and new_count < count and new_count != 0:
             ret += 1
-        if count == 0 and change > -100 and change < 100:
+        
+        # Landed exactly on 0
+        if new_count == 0:
             ret += 1
+        
+        count = new_count
         
     return ret
 
